@@ -49,23 +49,12 @@
 
   show heading: head => block(width: 100%, head + v(1%))
   show heading.where(level: 1): head => align(center)[
-    #text(
-      size: 14pt,
-      weight: "bold",
-      smallcaps(head),
-    )
+    #text(size: 14pt, weight: "bold", smallcaps(head))
   ]
   show figure.caption: capt => block(width: 75%, capt)
 
   // Title
-  align(
-    center,
-    text(
-      size: 18pt,
-      weight: "bold",
-      smallcaps(title),
-    ),
-  )
+  align(center, text(size: 18pt, weight: "bold", smallcaps(title)))
   // Authors and affiliations
   grid(
     columns: 1fr * authors.len(),
@@ -91,3 +80,4 @@
 
   body
 }
+
