@@ -7,7 +7,7 @@
 ) = {
   set document(
     title: title,
-    author: authors.keys().at(0),
+    author: authors.at(0).name,
     date: auto,
   )
   set page(
@@ -24,11 +24,11 @@
       } else { [] }
     },
     footer: align(left)[
-      #for (i, name) in authors.keys().enumerate() {
+      #for (i, author) in authors.enumerate() {
         if i > 0 {
           " | "
         }
-        name
+        author.name
       }
     ],
     numbering: "1",
@@ -57,19 +57,19 @@
   align(center, text(size: 18pt, weight: "bold", smallcaps(title)))
   // Authors and affiliations
   grid(
-    columns: 1fr * authors.len(),
+    columns: (1fr,) * authors.len(),
     align: center,
-    for name in authors.keys() {
-      name
-      if "affiliation" in authors.at(name).keys() {
+    row-gutter: 24pt,
+    ..authors.map(author => [
+      #author.name \
+      #if "affiliation" in author.keys() {
+        author.affiliation
         linebreak()
-        authors.at(name).affiliation
       }
-      if "email" in authors.at(name).keys() {
-        linebreak()
-        link("mailto:" + authors.at(name).email)
+      #if "email" in author.keys() {
+        link("mailto:" + author.email)
       }
-    }
+    ])
   )
 
   set outline(depth: 2, indent: 5%)
