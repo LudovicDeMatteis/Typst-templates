@@ -172,14 +172,6 @@
         ]
       }
     },
-    // footer: context {
-    //   if counter(page).get().at(0) != 1 {
-    //     text(
-    //       size: footer_size,
-    //       footer, //+ align(center)[#counter(page).get().at(0)],
-    //     )
-    //   }
-    // },
   )
   set text(size: text_size, font: "New Computer Modern")
   show heading: head => text(
