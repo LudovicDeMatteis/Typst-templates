@@ -7,7 +7,7 @@
 #let big = 20pt
 #let huge = 23pt
 #let Huge = 26pt
-#let header_sizes = (30pt, 20pt, 25pt, 15pt, 10pt)
+#let header_sizes = (30pt, 25pt, 20pt, 15pt, 10pt)
 
 #let content_slide(
   title: none,
@@ -127,6 +127,7 @@
       ]
     }
   })
+  show figure.caption: cpt => text(size: small, emph(cpt.body))
   set text(size: normal, font: "New Computer Modern")
   show heading: head => text(
     size: header_sizes.at(head.level - 1),
