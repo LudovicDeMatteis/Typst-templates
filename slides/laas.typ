@@ -14,6 +14,7 @@
   outline: true,
   body,
 ) = {
+  set heading(outlined: outline)
   slide[
     #if title != none {
       [
@@ -23,7 +24,7 @@
           inset: (left: 5%, right: 0%),
           fill: rgb("#001f3f"),
           text(fill: white, align(horizon + left)[
-            #heading(level: 2, outlined: outline, bookmarked: true, title)
+            #heading(level: 2, title)
           ]),
         ))
         #place(dx: 25%, dy: 2%, block(
@@ -58,13 +59,14 @@
   outline: true,
 ) = {
   set page(footer: none)
+  set heading(outlined: outline)
   slide[
     #place(dx: 0%, dy: 25%, block(height: 50%, width: 100%, inset: (left: 8%, right: 8%), fill: rgb("#001f3f"), text(
       fill: white,
       align(horizon + center)[
-        #heading(level: 1, outlined: outline, bookmarked: true, title)
+        #heading(level: 1, title)
         #line(stroke: white, length: 40%)
-        #heading(level: 2, outlined: false, bookmarked: true, subtitle)
+        #heading(level: 2, outlined: false, subtitle)
       ],
     )))
     #place(dx: 40%, dy: 73%, block(
@@ -78,6 +80,15 @@
   ]
 }
 
+#let sub(args, content) = {
+  set heading(outlined: false)
+  // counter(page).update(3)
+  only(args, content)
+}
+
+#let mathcol(c, body) = {
+  text(fill: c, $#body$)
+}
 
 #let slides(
   title: none,
@@ -129,6 +140,7 @@
   })
   show figure.caption: cpt => text(size: small, emph(cpt.body))
   set text(size: normal, font: "New Computer Modern")
+  set heading(bookmarked: true)
   show heading: head => text(
     size: header_sizes.at(head.level - 1),
     head,
