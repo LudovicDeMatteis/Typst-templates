@@ -1,7 +1,7 @@
 #import "@preview/polylux:0.4.0": *
 
 // Define text sizes
-#let text_size = 15pt
+#let text_size = 17pt
 #let footer_size = 10pt
 #let header_sizes = (25pt, 17pt, 15pt, 10pt)
 
@@ -14,18 +14,11 @@
     footer: none,
   )
   slide[
-    #place(
-      dx: 37%,
-      block(
-        height: 100%,
-        width: 50%,
-        align(horizon)[
-          = #title
-          #line(length: 45%)
-          == #subtitle
-        ],
-      ),
-    )
+    #place(dx: 37%, block(height: 100%, width: 50%, align(horizon)[
+      = #title
+      #line(length: 45%)
+      == #subtitle
+    ]))
   ]
 }
 
@@ -36,43 +29,31 @@
 ) = {
   set page(background: image("background.jpeg", width: 100%, height: 100%))
   slide[
-    #place(
-      dx: 0%,
-      dy: -10%,
-      [
-        #if title != none {
-          [
-            = #title
-            #line(length: 60%)
-            #v(-3%)
-            #if subtitle != none {
-              [== #subtitle]
-            }
-          ]
-          place(
-            dx: 0%,
-            dy: 30%,
-            block(
-              width: 100%,
-              height: 92%,
-              inset: (top: 2%, bottom: 0%),
-              body,
-            ),
-          )
-        } else {
-          place(
-            dx: 0%,
-            dy: 0%,
-            block(
-              width: 100%,
-              height: 110%,
-              inset: (top: 0%, bottom: 0%),
-              body,
-            ),
-          )
-        }
-      ],
-    )
+    #place(dx: 0%, dy: -10%, [
+      #if title != none {
+        [
+          = #title
+          #line(length: 60%)
+          #v(-3%)
+          #if subtitle != none {
+            [== #subtitle]
+          }
+        ]
+        place(dx: 0%, dy: 30%, block(
+          width: 100%,
+          height: 92%,
+          inset: (top: 2%, bottom: 0%),
+          body,
+        ))
+      } else {
+        place(dx: 0%, dy: 0%, block(
+          width: 100%,
+          height: 110%,
+          inset: (top: 0%, bottom: 0%),
+          body,
+        ))
+      }
+    ])
   ]
 }
 
@@ -124,40 +105,26 @@
           footer,
         )
         align(center)[
-          #numbering(
-            page-numbering,
-            ..counter(page).get(),
-            ..if both { counter(page).at(<numbering-main-end>) },
-          )
+          #numbering(page-numbering, ..counter(page).get(), ..if both { counter(page).at(<numbering-main-end>) })
         ]
       }
     },
   )
   set text(size: text_size, font: "New Computer Modern")
-  show heading: head => text(
-    size: header_sizes.at(head.level - 1),
-    smallcaps(head),
-  )
+  show heading: head => text(size: header_sizes.at(head.level - 1), smallcaps(head))
   slide[
-    #place(
-      dx: 37%,
-      block(
-        height: 100%,
-        width: 50%,
-        align(horizon)[
-          = #title
-          #line(length: 45%)
-          == #subtitle
+    #place(dx: 37%, block(height: 100%, width: 50%, align(horizon)[
+      = #title
+      #line(length: 45%)
+      == #subtitle
 
-          #align(horizon + left)[
-            #for (ai, name) in (..authors.map(a => a.name),).enumerate() {
-              linebreak()
-              name
-            }
-          ]
-        ],
-      ),
-    )
+      #align(horizon + left)[
+        #for (ai, name) in (..authors.map(a => a.name),).enumerate() {
+          linebreak()
+          name
+        }
+      ]
+    ]))
   ]
 
   body
