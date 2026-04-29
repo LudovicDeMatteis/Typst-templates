@@ -6,6 +6,10 @@
 
 #import "headings.typ": thesis-heading
 
+#let in-outline = state("in-outline", false)
+
+#let flex-caption(long, short) = context if in-outline.get() { short } else { long }
+
 #let template(
   author: "",
   title: "",
@@ -28,12 +32,15 @@
   equation-numbering-pattern: "(1.1)",
   // Special content
   frontmatter: none,
-  abstract: none,
-  resume: none,
-  aknowledgements: none,
   quote-text: none,
   quote-author: none,
-  acronyms: none,
+  abstract: none,
+  resume: none,
+  acknowledgments: none,
+  list_acronyms: none,
+  list_figures: none,
+  list_tables: none,
+  list_symbols: none,
   //
   text-base-size: 12pt,
   // Body content
@@ -195,12 +202,18 @@
     pagebreak(weak: true)
   }
 
-  if aknowledgements != none {
-    aknowledgements
+  if acknowledgments != none {
+    acknowledgments
     pagebreak(weak: true)
   }
 
   // -------------------  Outline  ------------------
+  show outline: it => {
+    in-outline.update(true)
+    it
+    in-outline.update(false)
+  }
+
   show outline.entry.where(
     level: 1,
   ): it => {
@@ -217,29 +230,24 @@
   outline(depth: 2, indent: 1.5em)
   pagebreak()
 
-  context {
-    // List of figures
-    let figures = figure.where(kind: image)
-    if query(figures).len() > 0 {
-      outline(
-        title: [List of Figures],
-        target: figures,
-      )
-      pagebreak()
-    }
-
-    // List of Tables
-    let tables = figure.where(kind: table)
-    if query(tables).len() > 0 {
-      outline(
-        title: [List of Tables],
-        target: tables,
-      )
-      pagebreak()
-    }
+  if list_symbols != none {
+    list_symbols
+    pagebreak(weak: true)
   }
 
-  acronyms
+  if list_acronyms != none {
+    list_acronyms
+    pagebreak(weak: true)
+  }
+
+  if list_figures != none {
+    list_figures
+    pagebreak(weak: true)
+  }
+  if list_tables != none {
+    list_tables
+    pagebreak(weak: true)
+  }
 
   // Change page counter
   set page(numbering: "1", header: context {
