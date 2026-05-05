@@ -10,6 +10,12 @@
 // prepend breaks before headings
 #let break-before-headings(it) = {
   // Automatically insert a page break before each chapter
+  show figure.where(
+    kind: "chapter",
+  ): it => {
+    pagebreak()
+    it
+  }
   show heading.where(
     level: 1,
   ): it => {
@@ -32,13 +38,16 @@
     level: 1,
   ): it => {
     if it.numbering != none {
-      block(width: 100%)[
-        #v(3cm)
+      block(
+        width: 90%,
+        stroke: (bottom: 1pt, right: 0pt),
+        inset: (bottom: 2em, top: 5em),
+        below: 10%,
+      )[
         #set text(2em, weight: "regular")
         #text(1.5em, counter(heading).display("1" + it.numbering))
         #h(0.5em)
         #smallcaps(it.body)
-        #v(1em)
       ]
     } else {
       block(width: 100%)[
@@ -79,7 +88,7 @@
       #v(0.5em)
     ]
   }
-  it
+  it + [wow]
 }
 
 #let thesis-heading(it) = {

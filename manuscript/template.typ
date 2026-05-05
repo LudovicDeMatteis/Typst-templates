@@ -10,6 +10,8 @@
 
 #let flex-caption(long, short) = context if in-outline.get() { short } else { long }
 
+#let chapter = figure.with(kind: "chapter", numbering: "I", supplement: "Chapter", caption: [])
+
 #let template(
   author: "",
   title: "",
@@ -173,15 +175,35 @@
 
   set page(footer: auto)
   set text(font: body-font)
-  // ---------------------  Settings for headings -----------------------
-  show: it => thesis-heading(it)
-  show heading: it => {
-    if equate-settings == none {
-      reset-counters(it)
+
+  // ---------------- Chapters display -------------
+  show figure.where(kind: "chapter"): it => {
+    pagebreak()
+    set text(20pt)
+    set align(left)
+    counter(heading).update(0)
+    if it.numbering != none {
+      block(
+        width: 90%,
+        stroke: (bottom: 1pt, right: 0pt),
+        inset: (bottom: 2em, top: 5em),
+        below: 10%,
+      )[
+        #set text(2em, weight: "regular")
+        #text(1.5em, counter(figure.where(kind: "chapter")).display("I" + it.numbering))
+        #h(0.5em)
+        #smallcaps(it.body)
+      ]
     } else {
-      it
+      block(width: 100%)[
+        #v(3cm)
+        #set text(2em, weight: "regular")
+        #smallcaps(it.body)
+        #v(1em)
+      ]
     }
   }
+  // --------------------- Headings Display -----------------------
 
   // ----------------  Citation / Abstract / Resume / Aknowledgements  ------------------
   if quote-text != none and quote-author != none {
@@ -208,26 +230,57 @@
   }
 
   // -------------------  Outline  ------------------
+  // emulate element function by creating show rule
+  let chapters-and-headings = figure.where(kind: "chapter", outlined: true).or(heading.where(outlined: true))
   show outline: it => {
     in-outline.update(true)
     it
     in-outline.update(false)
   }
-
-  show outline.entry.where(
-    level: 1,
-  ): it => {
-    v(14.75pt, weak: true)
-    it.prefix()
-    h(0.5em)
-    smallcaps(it.body())
-    h(1fr)
-    it.page()
+  show outline.entry: it => {
+    if it.element.func() == figure and it.element.kind == "chapter" {
+      let res = link(
+        it.element.location(),
+        if it.element.numbering != none {
+          [#numbering(it.element.numbering, ..it.element.counter.at(it.element.location())) #h(0.5em)]
+        }
+          + smallcaps(it.element.body),
+      )
+      if it.fill != none {
+        res += [ ] + box(width: 1fr, it.fill) + [ ]
+      } else {
+        res += h(1fr)
+      }
+      res += link(it.element.location(), it.page())
+      strong(res)
+    } else if it.element.func() == heading {
+      show link: set text(black)
+      let res = h(1em) * it.level
+      res += link(it.element.location(), it.prefix() + "   ")
+      if it.element.level == 1 {
+        res += link(it.element.location(), smallcaps(it.element.body))
+      } else {
+        res += link(it.element.location(), it.element.body)
+      }
+      if it.fill != none {
+        res += [ ] + box(width: 1fr, it.fill) + [ ]
+      } else {
+        res += h(1fr)
+      }
+      res += link(it.element.location(), it.page())
+      res
+    } else {
+      it
+    }
+    linebreak()
   }
+
   // ------------------- Tables of ... -------------------
   // Table of contents
   set outline.entry(fill: line(length: 100%, stroke: (thickness: 1pt, dash: "loosely-dotted")))
-  outline(depth: 2, indent: 1.5em)
+
+  chapter(numbering: none, outlined: false)[Table of Contents]
+  outline(title: none, depth: 2, indent: 1.5em, target: chapters-and-headings)
   pagebreak()
 
   if list_symbols != none {
