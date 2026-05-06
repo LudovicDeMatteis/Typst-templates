@@ -79,6 +79,7 @@
     }
   }
   set math.equation(supplement: none) if equate-settings == none
+  set math.equation(numbering: "1.")
 
   // equate settings
   show: it => {
@@ -174,12 +175,14 @@
   pagebreak()
 
   set page(footer: auto)
-  set text(font: body-font)
+  set text(font: body-font, hyphenate: true)
+  set par(justify: true)
 
   // ---------------- Chapters display -------------
   show figure.where(kind: "chapter"): it => {
     pagebreak()
-    set text(20pt)
+    set text(20pt, hyphenate: false)
+    set par(justify: false)
     set align(left)
     counter(heading).update(0)
     if it.numbering != none {
