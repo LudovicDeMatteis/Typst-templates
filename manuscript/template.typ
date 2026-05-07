@@ -162,7 +162,7 @@
   v(5fr)
   // Title
   line(length: 100%, stroke: 1.5pt + cover-color)
-  align(center, text(3em, weight: "bold", smallcaps(title)))
+  align(center, text(25pt, weight: "bold", smallcaps(title)))
   line(length: 100%, stroke: 1.5pt + cover-color)
   v(5fr)
   // Author
