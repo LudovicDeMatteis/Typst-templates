@@ -181,7 +181,7 @@
   // ---------------- Chapters display -------------
   show figure.where(kind: "chapter"): it => {
     pagebreak()
-    set text(20pt, hyphenate: false)
+    set text(16pt, hyphenate: false)
     set par(justify: false)
     set align(left)
     counter(heading).update(0)
