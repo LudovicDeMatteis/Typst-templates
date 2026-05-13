@@ -1,5 +1,5 @@
 #let color1 = rgb("#800080")
-#let color2 = rgb("#0000ff")
+#let color2 = rgb("#00df0f")
 #let color3 = rgb("#008002")
 #let color4 = rgb("#ffa500")
 #let color5 = rgb("#ff0000")

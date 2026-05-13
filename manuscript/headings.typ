@@ -7,31 +7,6 @@
 // They must be created in the precise order above, so the PDF link points to directly
 // ABOVE the cosmetics and BELOW the breaks.
 
-// prepend breaks before headings
-#let break-before-headings(it) = {
-  // Automatically insert a page break before each chapter
-  show figure.where(
-    kind: "chapter",
-  ): it => {
-    pagebreak()
-    it
-  }
-  show heading.where(
-    level: 1,
-  ): it => {
-    pagebreak(weak: true)
-    it
-  }
-  // Settings for sub-sub-sub-sections e.g. section 1.1.1.1
-  show heading.where(
-    level: 5,
-  ): it => {
-    it.body
-    linebreak()
-  }
-  it
-}
-
 #let headings_custom(it) = {
   // ------------------- Settings for Chapter headings -------------------
   show heading.where(
