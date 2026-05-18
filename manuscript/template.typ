@@ -11,6 +11,7 @@
 #let flex-caption(long, short) = context if in-outline.get() { short } else { long }
 
 #let chapter = figure.with(kind: "chapter", numbering: "I", supplement: "Chapter", caption: [])
+#let appendix = figure.with(kind: "chapter", numbering: "A", supplement: "Appendix", caption: [])
 
 #let template(
   author: "",
@@ -177,7 +178,7 @@
         #text(
           size: chapter_cfg.at("num_size"),
           weight: chapter_cfg.at("num_weight"),
-          [Chapter #counter(figure.where(kind: "chapter")).display("I" + it.numbering) -],
+          [#it.supplement #counter(figure.where(kind: "chapter")).display(it.numbering) -],
         )
         #parbreak()
         #smallcaps(it.body)
