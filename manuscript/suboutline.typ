@@ -61,7 +61,7 @@
 
       if last_subheading != none {
         outline(
-          title: title,
+          title: title + [\ #v(-0.5cm) #line(length: 100%, stroke: 1pt + black.lighten(50%)) #v(-0.5cm)],
           target: selector(target)
             .after(
               current_chapter.location(),
@@ -71,6 +71,7 @@
           depth: max_level,
           indent: indent,
         )
+        line(length: 100%, stroke: 1pt + black.lighten(50%))
       }
     }
   }

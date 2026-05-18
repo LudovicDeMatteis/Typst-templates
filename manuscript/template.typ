@@ -288,7 +288,7 @@
 
   // ------------------- Tables of ... -------------------
   // Table of contents
-  set outline.entry(fill: line(length: 100%, stroke: (thickness: 1pt, dash: "loosely-dotted")))
+  set outline.entry(fill: line(length: 100%, stroke: (thickness: 1pt, dash: ("dot", 10pt))))
 
   chapter(numbering: none, outlined: false)[Table of Contents]
   outline(title: none, depth: 2, indent: 1.5em, target: chapters-and-headings)
