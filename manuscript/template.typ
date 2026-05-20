@@ -2,7 +2,7 @@
 #import "@preview/great-theorems:0.1.2": great-theorems-init
 #import "@preview/hydra:0.6.1": hydra
 #import "@preview/equate:0.3.2": equate
-#import "@preview/i-figured:0.2.4": reset-counters, show-equation, show-figure
+#import "@preview/i-figured:0.2.4": reset-counters, show-figure
 #import "suboutline.typ": suboutline
 #import "variables.typ": *
 
@@ -12,6 +12,45 @@
 
 #let chapter = figure.with(kind: "chapter", numbering: "I", supplement: "Chapter", caption: [])
 #let appendix = figure.with(kind: "chapter", numbering: "A", supplement: "Appendix", caption: [])
+
+#let superfigure(..args) = {
+  // sub figures are positional
+  let sub_figures = args.pos()
+
+  // split grid and figure arguments
+  let figure_attr = ("alt", "placement", "scope", "caption", "kind", "supplement", "numbering", "gap", "outlined")
+  let grid_attr = ("columns", "rows", "gutter", "column-gutter", "row-gutter", "inset", "align", "fill", "stroke")
+  let super_figure_args = (:)
+  let grid_args = (:)
+  for (k, v) in args.named() {
+    if k in figure_attr { super_figure_args += ((k): v) }
+    if k in grid_attr { grid_args += ((k): v) }
+  }
+  // create the super figure
+  figure(
+    {
+      // reset sub_figure counter
+      let sub_counter = counter("superfigure-subfigure-counter")
+      sub_counter.update(0)
+
+      // overwrite some show behaviour for sub figures
+      // disable default numbering and disable default supplement
+      set figure(numbering: "a", supplement: none, outlined: false)
+      show figure: it => {
+        sub_counter.step()
+        // manual caption formatting
+        show figure.caption: caption => context {
+          sub_counter.display("(a) ") + caption.body
+        }
+        it
+        // prevent sub figures from incrementing the main figure counter
+        context { counter(figure.where(kind: it.kind)).update(n => n - 1) }
+      }
+      grid(..grid_args, ..sub_figures)
+    },
+    ..super_figure_args,
+  )
+}
 
 #let template(
   author: "",
@@ -92,11 +131,26 @@
   show: great-theorems-init // great-theorems settings
 
   // ------------------  Other settings  ---------------------
+  let counter_figure_chapter = counter("figures-in-chapter")
+  counter_figure_chapter.update(0)
+
   show figure.where(
     kind: table,
   ): set figure.caption(position: top)
-  show figure: it => {
-    block(show-figure(it, numbering: figure-numbering), inset: (y: 0.5em))
+
+  // Set show figure to use chapter numbering scheme
+  show figure.where(kind: image): it => context {
+    if it.numbering != none and it.outlined {
+      counter_figure_chapter.step()
+      let current_chapter = query(selector(figure.where(kind: "chapter", outlined: true)).before(here())).last()
+      set figure(numbering: none, supplement: none)
+      show figure.caption: caption => context {
+        [#it.supplement #numbering(current_chapter.numbering, current_chapter.counter.at(current_chapter.location()).last()).#counter_figure_chapter.display(it.numbering) - #caption.body]
+      }
+      block(it, inset: (y: 0.5em))
+    } else {
+      it
+    }
   }
   show figure.caption: box.with(width: 80%)
   // -------------------  Front Matter  ---------------------
@@ -157,6 +211,7 @@
     // set page(header: none)
     set align(left)
     counter(heading).update(0)
+    counter_figure_chapter.update(0)
     if it.numbering != none {
       block(
         width: chapter_cfg.at("block_width"),
