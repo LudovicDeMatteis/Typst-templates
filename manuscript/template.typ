@@ -91,6 +91,16 @@
             el.numbering,
             fig_in_chapter_counter.at(el.location()).last() + 1,
           )])
+      } else if el.func() == heading {
+        let current_chapter = query(selector(figure.where(kind: "chapter", outlined: true)).before(el.location())).last()
+        let chapter_number = numbering(current_chapter.numbering, current_chapter
+          .counter
+          .at(current_chapter.location())
+          .last())
+        link(el.location(), [#el.supplement #chapter_number.#numbering(
+            el.numbering,
+            ..counter(heading).at(el.location()),
+          )])
       } else {
         it
       }
