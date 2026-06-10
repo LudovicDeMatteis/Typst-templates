@@ -168,7 +168,7 @@
   )
   v(5fr)
   // Title
-  line(length: 100%, stroke: 1.5pt + cover-color)
+  line(length: 100%, stroke: (thickness: 2pt, paint: cover-color, cap: "round"))
   align(center, text(25pt, weight: "bold", title))
   line(length: 100%, stroke: (thickness: 2pt, paint: cover-color, cap: "round"))
   v(5fr)

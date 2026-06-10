@@ -57,7 +57,7 @@
 /*********************/
 /** Color variables **/
 /*********************/
-#let cover-color = color2
+#let cover-color = black
 #let heading-color = proper-purple
 #let link-color = ugent-blue
 
