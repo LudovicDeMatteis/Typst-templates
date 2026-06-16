@@ -10,6 +10,7 @@
 #import "variables.typ": *
 #import "custom_types.typ": *
 #import "figures.typ": *
+#import "../global/colors.typ": *
 
 #let template(
   author: "",
@@ -186,6 +187,35 @@
   set par(justify: true, first-line-indent: 0.5cm, spacing: text_base_size)
 
   // ---------------- Chapters display -------------
+  show figure.where(kind: "part"): it => {
+    pagebreak()
+    set align(center + horizon)
+    set page(header: none, footer: none)
+    block(
+      width: part_cfg.at("block_width"),
+      stroke: part_cfg.at("block_stroke"),
+      radius: part_cfg.at("block_radius"),
+      inset: part_cfg.at("block_inset"),
+    )[
+      #set text(
+        size: part_cfg.at("size"),
+        weight: part_cfg.at("weight"),
+        hyphenate: false,
+      )
+      #set par(justify: part_cfg.at("justify"))
+      #text(size: part_cfg.at("num_size"), weight: part_cfg.at(
+        "num_weight",
+      ))[Part #numbering(it.numbering, ..it.counter.at(here())) - #linebreak()]
+      #let res = it.body
+      #if part_cfg.at("emph") {
+        res = emph[#res]
+      }
+      #if part_cfg.at("smallcaps") {
+        res = smallcaps[#res]
+      }
+      #res
+    ]
+  }
   show figure.where(kind: "chapter"): it => {
     pagebreak()
     // set page(header: none)
@@ -277,14 +307,22 @@
 
   // -------------------  Outline  ------------------
   // emulate element function by creating show rule
-  let chapters-and-headings = figure.where(kind: "chapter", outlined: true).or(heading.where(outlined: true))
+  let chapters-and-headings = figure
+    .where(kind: "chapter", outlined: true)
+    .or(heading.where(outlined: true))
+    .or(figure.where(kind: "part", outlined: true))
   show outline: it => {
     in-outline.update(true)
     it
     in-outline.update(false)
   }
   show outline.entry: it => {
-    if it.element.func() == figure and it.element.kind == "chapter" {
+    if it.element.func() == figure and it.element.kind == "part" {
+      set align(center + horizon)
+      set text(size: 14pt, fill: outline-part-color, weight: "bold")
+      [#it.element.supplement #numbering(it.element.numbering, ..it.element.counter.at(it.element.location())) - #it.element.body]
+      v(-0.5cm)
+    } else if it.element.func() == figure and it.element.kind == "chapter" {
       let res = link(
         it.element.location(),
         if it.element.numbering != none {
@@ -327,7 +365,7 @@
   set outline.entry(fill: line(length: 100%, stroke: (thickness: 1pt, dash: ("dot", 10pt))))
 
   chapter(numbering: none, outlined: false)[Table of Contents]
-  outline(title: none, depth: 3, indent: 1.5em, target: chapters-and-headings)
+  outline(title: none, depth: 2, indent: 1.5em, target: chapters-and-headings)
   pagebreak()
 
   if list_symbols != none {

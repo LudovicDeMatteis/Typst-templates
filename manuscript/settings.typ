@@ -36,6 +36,22 @@
   ),
 )
 
+#let part_cfg = (
+  "size": 32pt,
+  "weight": "regular",
+  "smallcaps": true,
+  "justify": false,
+  "emph": false,
+  //
+  "block_width": 90%,
+  "block_stroke": (bottom: 2pt, top: 2pt),
+  "block_radius": 0pt,
+  "block_inset": (bottom: 5em, top: 5em),
+  //
+  "num_size": 36pt,
+  "num_weight": "bold",
+)
+
 #let chapter_cfg = (
   "size": 28pt,
   "weight": "regular",
@@ -60,6 +76,7 @@
 #let cover-color = black
 #let heading-color = proper-purple
 #let link-color = ugent-blue
+#let outline-part-color = proper-purple
 
 /*********************/
 /* Equation settings */
