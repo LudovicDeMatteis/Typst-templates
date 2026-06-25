@@ -18,21 +18,21 @@
     weight: "bold",
     emph: false,
     smallcaps: true,
-    inset: (y: 1em),
+    inset: (y: 0.5em),
   ),
   "h3": (
-    size: 16pt,
-    weight: "bold",
-    emph: false,
-    smallcaps: true,
-    inset: (y: 1em),
-  ),
-  "h4": (
     size: 14pt,
     weight: "bold",
     emph: false,
     smallcaps: true,
-    inset: (y: 1em),
+    inset: (y: 0.2em),
+  ),
+  "h4": (
+    size: text_base_size,
+    weight: "bold",
+    emph: false,
+    smallcaps: true,
+    inset: (y: 0.0em),
   ),
 )
 
