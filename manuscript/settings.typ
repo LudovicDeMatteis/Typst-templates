@@ -3,7 +3,7 @@
 /** Text-related variables (size, font, weight, modifiers...) **/
 /***************************************************************/
 #let text_base_size = 12pt
-#let list_markers = (text(20pt, gray.darken(20%), [•], baseline: -2.5pt), [-])
+#let list_markers = (text(20pt, gray.darken(20%), [•], baseline: 2pt), [--])
 
 #let headings_cfg = (
   "h1": (

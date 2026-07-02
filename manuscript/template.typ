@@ -63,7 +63,6 @@
   //
   show ref: it => context {
     let el = it.element
-
     if el != none {
       let with-subnumbers = (
         equate-settings.keys().contains("sub-numbering") and equate-settings.sub-numbering
@@ -83,25 +82,31 @@
           ..el.body.value,
         ))
       } else if el.func() == figure and el.kind == image {
-        let current_chapter = query(selector(figure.where(kind: "chapter", outlined: true)).before(el.location())).last()
-        let chapter_number = numbering(current_chapter.numbering, current_chapter
-          .counter
-          .at(current_chapter.location())
-          .last())
+        let current_chapter = query(
+          selector(figure.where(kind: "chapter", outlined: true)).before(el.location()),
+        ).last()
+        let chapter_number = numbering(
+          current_chapter.numbering,
+          current_chapter.counter.at(current_chapter.location()).last(),
+        )
         link(el.location(), [#el.supplement #chapter_number.#numbering(
             el.numbering,
             fig_in_chapter_counter.at(el.location()).last() + 1,
           )])
       } else if el.func() == heading {
-        let current_chapter = query(selector(figure.where(kind: "chapter", outlined: true)).before(el.location())).last()
-        let chapter_number = numbering(current_chapter.numbering, current_chapter
-          .counter
-          .at(current_chapter.location())
-          .last())
+        let current_chapter = query(
+          selector(figure.where(kind: "chapter", outlined: true)).before(el.location()),
+        ).last()
+        let chapter_number = numbering(
+          current_chapter.numbering,
+          current_chapter.counter.at(current_chapter.location()).last(),
+        )
         link(el.location(), [#el.supplement #chapter_number.#numbering(
             el.numbering,
             ..counter(heading).at(el.location()),
           )])
+      } else if el.func() == figure and el.kind == "part" {
+        emph([#it . #el.body])
       } else {
         it
       }
@@ -203,9 +208,12 @@
         hyphenate: false,
       )
       #set par(justify: part_cfg.at("justify"))
-      #text(size: part_cfg.at("num_size"), weight: part_cfg.at(
-        "num_weight",
-      ))[Part #numbering(it.numbering, ..it.counter.at(here())) - #linebreak()]
+      #text(
+        size: part_cfg.at("num_size"),
+        weight: part_cfg.at(
+          "num_weight",
+        ),
+      )[Part #numbering(it.numbering, ..it.counter.at(here())) - #linebreak()]
       #let res = it.body
       #if part_cfg.at("emph") {
         res = emph[#res]
@@ -403,10 +411,9 @@
       if calc.odd(here().page()) {
         align(right, emph(current_chapter.body))
       } else {
-        let last_headings = query(selector(heading
-          .where(level: 1, outlined: true)
-          .after(current_chapter.location())
-          .before(here())))
+        let last_headings = query(selector(
+          heading.where(level: 1, outlined: true).after(current_chapter.location()).before(here()),
+        ))
         if last_headings != () {
           align(left, emph(hydra(1)))
         }
