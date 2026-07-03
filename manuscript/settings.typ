@@ -11,7 +11,7 @@
     weight: "bold",
     emph: false,
     smallcaps: true,
-    inset: (y: 1em),
+    inset: (y: 0.5em),
   ),
   "h2": (
     size: 18pt,
@@ -91,7 +91,7 @@
 /* Numbering settings */
 /**********************/
 #let equation-numbering = "(1.a)"
-#let heading-numbering = "1.1"
+#let heading-numbering = "1.1 -"
 #let page-numbering-preface = "i'"
 #let page-numbering = "1"
 #let enum-numbering = "(i)"

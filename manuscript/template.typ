@@ -193,9 +193,9 @@
 
   // ---------------- Chapters display -------------
   show figure.where(kind: "part"): it => {
-    pagebreak()
-    set align(center + horizon)
     set page(header: none, footer: none)
+    pagebreak(to: "odd", weak: true)
+    set align(center + horizon)
     block(
       width: part_cfg.at("block_width"),
       stroke: part_cfg.at("block_stroke"),
@@ -225,7 +225,10 @@
     ]
   }
   show figure.where(kind: "chapter"): it => {
-    pagebreak()
+    {
+      set page(header: none, numbering: none)
+      pagebreak(to: "odd", weak: true)
+    }
     // set page(header: none)
     set align(left)
     counter(heading).update(0)
@@ -291,6 +294,7 @@
 
   // ----------------  Citation / Abstract / Resume / Aknowledgements  ------------------
   if quote-text != none and quote-author != none {
+    pagebreak(to: "odd", weak: false)
     set quote(block: true)
     align(center + horizon, text(1.6em, weight: "regular", quote(attribution: quote-author)[
       #quote-text
@@ -299,16 +303,19 @@
   }
 
   if abstract != none {
+    pagebreak(to: "odd", weak: false)
     abstract
     pagebreak(weak: true)
   }
 
   if resume != none {
+    pagebreak(to: "odd", weak: false)
     resume
     pagebreak(weak: true)
   }
 
   if acknowledgments != none {
+    pagebreak(to: "odd", weak: false)
     acknowledgments
     pagebreak(weak: true)
   }
@@ -409,18 +416,22 @@
     }
     if previous_chapter != () and not skip_header {
       if calc.odd(here().page()) {
-        align(right, emph(current_chapter.body))
+        align(right, emph(hydra(1)))
       } else {
         let last_headings = query(selector(
           heading.where(level: 1, outlined: true).after(current_chapter.location()).before(here()),
         ))
         if last_headings != () {
-          align(left, emph(hydra(1)))
+          let chapter_number = numbering(
+            current_chapter.numbering,
+            current_chapter.counter.at(current_chapter.location()).last(),
+          )
+          align(left, emph(chapter_number + " - " + current_chapter.body))
         }
       }
     }
   })
-  counter(page).update(1)
+  counter(page).update(0)
 
   // Content
   body
