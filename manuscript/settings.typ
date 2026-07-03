@@ -3,11 +3,12 @@
 /** Text-related variables (size, font, weight, modifiers...) **/
 /***************************************************************/
 #let text_base_size = 12pt
+#let base_leading = 0.70em
 #let list_markers = (text(20pt, gray.darken(20%), [•], baseline: 2pt), [--])
 
 #let headings_cfg = (
   "h1": (
-    size: 20pt,
+    size: 22pt,
     weight: "bold",
     emph: false,
     smallcaps: true,
@@ -75,8 +76,8 @@
 /*********************/
 #let cover-color = black
 #let heading-color = proper-purple
-#let link-color = ugent-blue
-#let outline-part-color = proper-purple
+#let link-color = ugent-blue.darken(40%)
+#let outline-part-color = color6
 
 /*********************/
 /* Equation settings */
@@ -91,8 +92,10 @@
 /* Numbering settings */
 /**********************/
 #let equation-numbering = "(1.a)"
-#let heading-numbering = "1.1 -"
+#let heading-numbering = "1.1.1.1" // Hardcoded additional " - "
 #let page-numbering-preface = "i'"
 #let page-numbering = "1"
 #let enum-numbering = "(i)"
 #let figure-numbering = "1.1"
+
+#let figure-inset = (y: 0.7em)

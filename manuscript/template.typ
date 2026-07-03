@@ -60,7 +60,13 @@
   // ------------------  Math settings  ---------------------
   show: equate.with(..equate-settings)
   set math.equation(numbering: equation-numbering)
-  //
+  show math.equation: it => {
+    block(
+      it,
+      inset: (bottom: 5pt),
+    )
+  }
+
   show ref: it => context {
     let el = it.element
     if el != none {
@@ -108,7 +114,7 @@
       } else if el.func() == figure and el.kind == "part" {
         emph([#it . #el.body])
       } else {
-        it
+        emph(it)
       }
     } else {
       it
@@ -131,9 +137,10 @@
       let current_chapter = query(selector(figure.where(kind: "chapter", outlined: true)).before(here())).last()
       set figure(numbering: none, supplement: none)
       show figure.caption: caption => context {
+        set text(hyphenate: false)
         [#it.supplement #numbering(current_chapter.numbering, current_chapter.counter.at(current_chapter.location()).last()).#fig_in_chapter_counter.display(it.numbering) - #caption.body]
       }
-      block(it, inset: (y: 0.5em))
+      block(it, inset: figure-inset)
     } else {
       it
     }
@@ -189,7 +196,7 @@
 
   set page(footer: auto, header: none)
   set text(font: body-font, hyphenate: true)
-  set par(justify: true, first-line-indent: 0.5cm, spacing: text_base_size)
+  set par(justify: true, first-line-indent: 0.5cm, spacing: text_base_size, leading: base_leading)
 
   // ---------------- Chapters display -------------
   show figure.where(kind: "part"): it => {
@@ -281,15 +288,19 @@
   show heading: it => {
     let lvl = calc.min(it.level, 4)
     let key = "h" + str(lvl)
-    set text(size: headings_cfg.at(key).at("size"), weight: headings_cfg.at(key).at("weight"))
+    set text(size: headings_cfg.at(key).at("size"), weight: headings_cfg.at(key).at("weight"), hyphenate: false)
+
     let res = it
+    if (it.outlined) {
+      res = numbering(heading-numbering + " - ", ..counter(heading).at(here())) + it.body
+    }
     if headings_cfg.at(key).at("emph") {
       res = emph(res)
     }
     if headings_cfg.at(key).at("smallcaps") {
       res = smallcaps(res)
     }
-    block(res, inset: headings_cfg.at(key).at("inset"))
+    block(inset: headings_cfg.at(key).at("inset"), res)
   }
 
   // ----------------  Citation / Abstract / Resume / Aknowledgements  ------------------
@@ -335,7 +346,10 @@
     if it.element.func() == figure and it.element.kind == "part" {
       set align(center + horizon)
       set text(size: 14pt, fill: outline-part-color, weight: "bold")
-      [#it.element.supplement #numbering(it.element.numbering, ..it.element.counter.at(it.element.location())) - #it.element.body]
+      v(text_base_size)
+      underline(
+        [#it.element.supplement #numbering(it.element.numbering, ..it.element.counter.at(it.element.location())) - #it.element.body],
+      )
       v(-0.5cm)
     } else if it.element.func() == figure and it.element.kind == "chapter" {
       let res = link(

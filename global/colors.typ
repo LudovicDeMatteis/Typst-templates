@@ -3,6 +3,7 @@
 #let color3 = rgb("#008002")
 #let color4 = rgb("#ffa500")
 #let color5 = rgb("#ff0000")
+#let color6 = rgb("#01065e")
 
 #let ugent-blue = rgb(30, 100, 200)
 #let caribbean-current = rgb(30, 100, 101)
