@@ -112,7 +112,7 @@
             ..counter(heading).at(el.location()),
           )])
       } else if el.func() == figure and el.kind == "part" {
-        emph([#it . #el.body])
+        emph([#it - #el.body])
       } else {
         emph(it)
       }
