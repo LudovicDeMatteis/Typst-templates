@@ -60,12 +60,9 @@
   // ------------------  Math settings  ---------------------
   show: equate.with(..equate-settings)
   set math.equation(numbering: equation-numbering)
-  show math.equation: it => {
-    block(
-      it,
-      inset: (bottom: 5pt),
-    )
-  }
+
+  show math.equation.where(block: true): set block(inset: (bottom: 5pt))
+  show math.equation.where(block: false): box
 
   show ref: it => context {
     let el = it.element
@@ -120,7 +117,6 @@
       it
     }
   }
-  show math.equation: box // no line breaks in equations
   show: great-theorems-init // great-theorems settings
 
   // ------------------  Other settings  ---------------------
@@ -196,7 +192,7 @@
 
   set page(footer: auto, header: none)
   set text(font: body-font, hyphenate: true)
-  set par(justify: true, first-line-indent: 0.5cm, spacing: text_base_size, leading: base_leading)
+  set par(justify: true, first-line-indent: (amount: 0.5cm, all: false), spacing: text_base_size, leading: base_leading)
 
   // ---------------- Chapters display -------------
   show figure.where(kind: "part"): it => {
