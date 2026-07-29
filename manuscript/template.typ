@@ -60,6 +60,7 @@
   // ------------------  Math settings  ---------------------
   show: equate.with(..equate-settings)
   set math.equation(numbering: equation-numbering)
+  show math.equation: set text(font: "STIX Two Math")
 
   show math.equation.where(block: true): set block(inset: (bottom: 5pt))
   show math.equation.where(block: false): box
