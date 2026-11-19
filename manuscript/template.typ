@@ -25,6 +25,7 @@
   cover-font: "Libertinus Serif",
   // Special content
   frontmatter: none,
+  backcover: none,
   quote-text: none,
   quote-author: none,
   abstract: none,
@@ -146,50 +147,52 @@
   // -------------------  Front Matter  ---------------------
   // University given cover page
   set text(font: body-font)
+  set page(numbering: page-numbering-preface, footer: none, header: none)
+  counter(page).update(1)
+
   if frontmatter != none {
+    set page(margin: 0pt)
     frontmatter
     pagebreak(weak: true)
   }
 
-  set page(numbering: page-numbering-preface, footer: none, header: none)
-  counter(page).update(1)
+  if frontmatter == none {
+    // -------------------  Cover  ---------------------
+    set text(font: cover-font)
 
-  // -------------------  Cover  ---------------------
-  set page(footer: none, header: none)
-  set text(font: cover-font)
-
-  v(1fr)
-  // Logos
-  grid(
-    columns: (1fr, 1fr),
-    rows: auto,
-    column-gutter: 100pt,
-    row-gutter: 7pt,
-    grid.cell(
-      colspan: 1,
-      align: center,
-      uni-logo,
-    ),
-    grid.cell(
-      colspan: 1,
-      align: center,
-      lab-logo,
-    ),
-  )
-  v(5fr)
-  // Title
-  line(length: 100%, stroke: (thickness: 2pt, paint: cover-color, cap: "round"))
-  align(center, text(25pt, weight: "bold", title))
-  line(length: 100%, stroke: (thickness: 2pt, paint: cover-color, cap: "round"))
-  v(5fr)
-  // Author
-  align(center, text(1.5em, weight: 500, "Thesis by " + author))
-  // Date
-  align(center, text(1.3em, weight: 100, deadline))
-  // Supervisors
-  align(center + bottom, text(1.3em, weight: 100, "Supervised by " + linebreak() + supervisor))
-  v(1fr)
-  pagebreak()
+    v(1fr)
+    // Logos
+    grid(
+      columns: (1fr, 1fr),
+      rows: auto,
+      column-gutter: 100pt,
+      row-gutter: 7pt,
+      grid.cell(
+        colspan: 1,
+        align: center,
+        uni-logo,
+      ),
+      grid.cell(
+        colspan: 1,
+        align: center,
+        lab-logo,
+      ),
+    )
+    v(5fr)
+    // Title
+    line(length: 100%, stroke: (thickness: 2pt, paint: cover-color, cap: "round"))
+    align(center, text(25pt, weight: "bold", title))
+    line(length: 100%, stroke: (thickness: 2pt, paint: cover-color, cap: "round"))
+    v(5fr)
+    // Author
+    align(center, text(1.5em, weight: 500, "Thesis by " + author))
+    // Date
+    align(center, text(1.3em, weight: 100, deadline))
+    // Supervisors
+    align(center + bottom, text(1.3em, weight: 100, "Supervised by " + linebreak() + supervisor))
+    v(1fr)
+    pagebreak()
+  }
 
   set page(footer: auto, header: none)
   set text(font: body-font, hyphenate: true)
@@ -446,4 +449,18 @@
 
   // Content
   body
+
+  set page(header: none, footer: none)
+  pagebreak(weak: true, to: "odd")
+  align(center + bottom, text(
+    10pt,
+    weight: 100,
+    [The document is based on a Typst template available at: #linebreak() https://github.com/LudovicDeMatteis/Typst-templates ],
+  ))
+
+  if backcover != none {
+    set page(margin: 0pt, header: none, footer: none)
+    pagebreak(to: "even", weak: true)
+    backcover
+  }
 }
